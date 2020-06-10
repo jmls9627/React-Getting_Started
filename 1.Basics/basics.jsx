@@ -1,12 +1,31 @@
-
-
-function Button() {
-  const[counter,setCounter]=useState(0); //hook
-  return <button onClick={()=>setCounter(counter+1)}>{counter}</button>;   //function PlusOne() {setCounter(counter+1);}
+function Button(props) {
+  //	const handleClick = () => setCounter(counter+1);
+    return (
+    <button onClick={props.onClickFunction}>
+       {props.message} + 1 = {props.message + 1}
+      </button>
+    ); 
+  }
   
-}
-
-ReactDOM.render(
-  <Button/>,
-  document.getElementById('mountNode'),
-);
+  function Display(props){
+    return (
+      <div>{props.msg}</div>
+    );
+  }
+  
+  function App(){
+   const [counter,setCounter]=useState(0);
+   const IncrementCounter = () => setCounter(counter+1);   
+    return(
+     <div>
+       <Display msg="la suma es"/> 
+       <Button onClickFunction={IncrementCounter} message={counter}/>
+           
+     </div>
+    )
+  }
+  
+  ReactDOM.render(
+    <App/>,
+    document.getElementById('mountNode'),
+  );
