@@ -1,11 +1,12 @@
+
+
 function Button() {
-  return <button>Test</button>;
-  // return React.createElement('div',null,'Hello React');
- 
+  const[counter,setCounter]=useState(0); //hook
+  return <button onClick={()=>setCounter(counter+1)}>{counter}</button>;   //function PlusOne() {setCounter(counter+1);}
+  
 }
 
 ReactDOM.render(
   <Button/>,
-  //React.createElement(hello, null),
   document.getElementById('mountNode'),
 );
