@@ -18,7 +18,7 @@ function App(){
  const IncrementCounter = (increVal) => setCounter(counter+increVal);
 
   return(
-   <div>
+   <div >
       <Button onClickFunction={IncrementCounter} incre={1}/>
       <Button onClickFunction={IncrementCounter} incre={5}/>
       <Button onClickFunction={IncrementCounter} incre={10}/>
