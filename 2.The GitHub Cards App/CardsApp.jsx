@@ -1,14 +1,8 @@
-const testData = [
-    {name: "Dan Abramov", avatar_url: "https://avatars0.githubusercontent.com/u/810438?v=4", company: "@facebook"},
-    {name: "Sophie Alpert", avatar_url: "https://avatars2.githubusercontent.com/u/6820?v=4", company: "Humu"},
-    {name: "Sebastian Markbåge", avatar_url: "https://avatars2.githubusercontent.com/u/63648?v=4", company: "Facebook"},
-        ];
-     
-const CardList= (props) => (
+     const CardList= (props) => (
     // <Card {...testData[0]}/>
     //<Card {...testData[1]}/>
      <div>
-      {props.profile.map(profile => <Card {...profile}/>)}
+      {props.profile.map(profile => <Card key={profile.id} {...profile}/>)}
     </div>
     )
 
@@ -30,9 +24,12 @@ class Card extends React.Component{
 class Form extends React.Component{
   //userNameIn = React.createRef(); ref={this.userNameIn}
   state = {username:''};
-  handleSubmit = (event) => { 
+  handleSubmit = async (event) => { 
     event.preventDefault();
+   const resp=await axios.get(`https://api.github.com/users/${this.state.username}`)
     console.log(this.state.username);
+    this.props.onSubmit(resp.data);
+    this.setState({username:''})
   };
   render(){
     return(
@@ -47,19 +44,20 @@ class Form extends React.Component{
 }
   
   class App extends React.Component{
-     /* constructor(props){
-        super(props);
-        this.state={
-      profiles:testData,
-    };
-  }*/state={
-    profiles:testData,
+    state={
+    profiles:[],
   };
+  addNewProfile=(profileData)=>{
+     this.setState(prevState =>({
+       profiles: [...prevState.profiles,  profileData],
+     }));
+    console.log('App', profileData)
+  }
     render(){
       return (
       <div>
         <div className="header">{this.props.title}</div>
-          <Form/> 
+          <Form onSubmit={this.addNewProfile}/> 
          <CardList profile={this.state.profiles}/>
       </div>
       )
