@@ -3,7 +3,7 @@ import { useState } from "react";
 
 const PlayNumber=props=>(
     <button className="number" 
-    onClick={()=>console.log("Num", props.number)}
+    onClick={()=>props.onClick( props.number, props.status)}
     style={{backgroundColor:colors[props.status]}}
     >
           {props.number}
@@ -34,6 +34,32 @@ const StarMatch = () => {
       }
         return'available';
     };
+     
+    const onNumberClick =(number,currentStatus)=>{
+      if (currentStatus=='used'){
+        return;
+      }
+      
+      const newCandidatesNums = 
+      currentStatus==='available'
+      ?candidatesNums.concat(number)
+      :candidatesNums.filter(cn => cn !== number);
+      
+      if(utils.sum(newCandidatesNums)!== stars){
+        setCandidatesNums(newCandidatesNums);
+      } else {
+        const newAvailableNums=availableNums.filter(
+          n=> !newCandidatesNums.includes(n)
+        );
+        setStars(utils.randomSumIn(newAvailableNums,9))
+        setAvailableNums(newAvailableNums);
+        setCandidatesNums([]);
+
+      }
+    }
+
+
+
     return (
       <div className="game">
         <div className="help">
@@ -48,6 +74,7 @@ const StarMatch = () => {
           <PlayNumber
            key={number} number={number}
            status={numberStatus(number)}
+           onClick={onNumberClick}
            />
          )}
           </div>
