@@ -2,8 +2,11 @@
 import { useState } from "react";
 
 const PlayNumber=props=>(
-    <button className="number" onClick={()=>console.log("Num", props.number)}>
-        {props.number}
+    <button className="number" 
+    onClick={()=>console.log("Num", props.number)}
+    style={{backgroundColor:colors[props.status]}}
+    >
+          {props.number}
         </button>
 );
 const StarDisplay = props => (
@@ -17,6 +20,20 @@ const StarDisplay = props => (
 const StarMatch = () => {
     //const stars=utils.random(1,9);
     const [stars,setStars]=useState(utils.random(1,9));
+    const [availableNums, setAvailableNums]=useState(utils.range(1,9));//[1,2,3,4,5]
+    const [candidatesNums, setCandidatesNums]=useState([]); //2,3
+
+    const canditateAreWrong=utils.sum(candidatesNums) > stars;
+
+    const numberStatus =(number) => {
+      if(!availableNums.includes(number)){
+        return 'used';
+      }
+      if(candidatesNums.includes(number)){
+        return canditateAreWrong ? 'wrong' : 'candidate';
+      }
+        return'available';
+    };
     return (
       <div className="game">
         <div className="help">
@@ -28,7 +45,10 @@ const StarMatch = () => {
           </div>
           <div className="right">
           {utils.range(1,9).map(number=>
-          <PlayNumber key={number} number={number}/>
+          <PlayNumber
+           key={number} number={number}
+           status={numberStatus(number)}
+           />
          )}
           </div>
         </div>
