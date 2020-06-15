@@ -1,6 +1,6 @@
 // STAR MATCH - Starting Template
 import { useState } from "react";
-
+//
 const PlayNumber=props=>(
     <button className="number" 
     onClick={()=>props.onClick( props.number, props.status)}
@@ -9,6 +9,7 @@ const PlayNumber=props=>(
           {props.number}
         </button>
 );
+//
 const StarDisplay = props => (
     <>
     {utils.range(1,props.count).map(starId =>
@@ -16,7 +17,14 @@ const StarDisplay = props => (
         )}
     </>
 );
+//
+const PlayAgain = props => (
+<div className="game-done">
+  <button onClick={props.onClick}>Play Again</button>
+</div>
+);
 
+/////
 const StarMatch = () => {
     //const stars=utils.random(1,9);
     const [stars,setStars]=useState(utils.random(1,9));
@@ -24,6 +32,13 @@ const StarMatch = () => {
     const [candidatesNums, setCandidatesNums]=useState([]); //2,3
 
     const canditateAreWrong=utils.sum(candidatesNums) > stars;
+    const gameIsDone = availableNums.length===0;
+//
+    const resetGame=()=>{
+     setStars(utils.random(1,9));
+     setAvailableNums(utils.range(1,9));
+     setCandidatesNums([]);
+    }
 
     const numberStatus =(number) => {
       if(!availableNums.includes(number)){
@@ -57,9 +72,6 @@ const StarMatch = () => {
 
       }
     }
-
-
-
     return (
       <div className="game">
         <div className="help">
@@ -67,7 +79,12 @@ const StarMatch = () => {
         </div>
         <div className="body">
           <div className="left">
-           <StarDisplay count={stars}/>
+           {gameIsDone ? (
+             <PlayAgain onClick={resetGame}/>
+           ):(
+            <StarDisplay count={stars}/>
+           )}
+          
           </div>
           <div className="right">
           {utils.range(1,9).map(number=>
