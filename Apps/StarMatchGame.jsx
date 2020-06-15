@@ -18,7 +18,7 @@ const StarDisplay = props => (
     </>
 );
 //
-const PlayAgain = props => (
+const PlayAgain= props => (
 <div className="game-done">
   <div className='message'
    style={{color:props.gameStatus ==='lost' ? 'red' : 'green'}}>
@@ -29,7 +29,7 @@ const PlayAgain = props => (
 );
 
 /////
-const StarMatch = () => {
+const Game = (props) => {
     //const stars=utils.random(1,9);
     const [stars,setStars]=useState(utils.random(1,9));
     const [availableNums, setAvailableNums]=useState(utils.range(1,9));//[1,2,3,4,5]
@@ -41,7 +41,7 @@ const StarMatch = () => {
       const timerId = setTimeout(() => {
           setSecondLeft(secondLeft-1);
           },1000);
-          return ()=> clearTimeout(timerId);
+         // return ()=> clearTimeout(timerId);
         }
       });
       
@@ -52,14 +52,7 @@ const StarMatch = () => {
     const gameStatus=availableNums.length===0
     ? 'won'
     : secondLeft===0 ? 'lost' : 'active'
-//
-    const resetGame=()=>{
-     setStars(utils.random(1,9));
-     setAvailableNums(utils.range(1,9));
-     setCandidatesNums([]);
-     setSecondLeft(10);
-    }
-
+ 
     const numberStatus =(number) => {
       if(!availableNums.includes(number)){
         return 'used';
@@ -100,7 +93,7 @@ const StarMatch = () => {
         <div className="body">
           <div className="left">
            {gameStatus !=='active' ? (
-             <PlayAgain onClick={resetGame} gameStatus={gameStatus}/>
+             <PlayAgain onClick={props.startNewGame} gameStatus={gameStatus}/>
            ):(
             <StarDisplay count={stars}/>
            )}
@@ -121,6 +114,11 @@ const StarMatch = () => {
     );
   };
   
+  const StarMatch =() =>{
+    const [gameId, setGameId]=useState(1);
+    return <Game key={gameId} startNewGame={() => setGameId(gameId+1)}/>;
+  }
+
   // Color Theme
   const colors = {
     available: 'lightgray',
